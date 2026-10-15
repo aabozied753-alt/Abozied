@@ -4,6 +4,7 @@
   1. Text: search for the words you want to change (e.g. "Netflix Content Dashboard") and edit them.
   2. Skills: each skill is <span class="chip">Name</span>. Add or delete a chip. Use class="chip learning" for a skill you are still learning.
   3. Projects: copy a whole <article class="project">...</article> block to add a project; change the title, Problem, Solution and tags.
+  3b. Photo: save your picture as photo.jpg in the same folder as this file (it shows in the About section).
   4. Links: replace YOUR-USERNAME (GitHub) and put cv.pdf next to this file. Search "href=" to find the rest.
   5. Colors: change the values at the top of <style> (--accent, --bg, ...). The dark theme has its own values just below.
   6. Admin sign-in (Google): visitors see the page normally. Only the Gmail in ADMIN_EMAIL (search for it in the script) can unlock the edit pencil.
@@ -202,6 +203,11 @@ section { padding-block: clamp(3.5rem, 8vw, 6rem); }
 .tag-note { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); border: 1px dashed var(--line); border-radius: 6px; padding: 0.15rem 0.5rem; justify-self: start; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 
+/* Profile photo (About section): save your picture as photo.jpg next to this file */
+.photo { margin: 0 0 1.5rem; position: relative; width: 100%; max-width: 20rem; aspect-ratio: 4 / 5; border-radius: var(--radius); overflow: hidden; border: 1px dashed var(--line); background: var(--surface-2); display: grid; place-items: center; }
+.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.photo figcaption { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); text-align: center; padding: 1rem; }
+
 /* Services */
 .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--line); gap: 1px; }
 .service { background: var(--bg); padding: 1.6rem 1.4rem; display: grid; gap: 0.7rem; align-content: start; min-width: 0; }
@@ -385,11 +391,17 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
             <p>I enjoy the part of data work where a messy spreadsheet becomes a story: cleaning columns, finding the pattern, then choosing the one chart that shows it. I also design relational databases, from the ERD to the mapping schema.</p>
             <p>When I hit a problem, I break it into small checks, test each one, and write down what I found. I have learned SQL for querying data, and I am now learning Power BI and Machine Learning to take on bigger datasets.</p>
           </div>
-          <div class="stats" role="list">
+          <div>
+            <figure class="photo">
+              <img src="photo.jpg" alt="Ahmed Abu Zaid" onerror="this.remove()">
+              <figcaption>Add your photo here: save it as photo.jpg next to this file.</figcaption>
+            </figure>
+            <div class="stats" role="list">
             <div class="stat" role="listitem"><b>2</b><span>Featured projects</span></div>
             <div class="stat" role="listitem"><b>4</b><span>Database systems modeled</span></div>
             <div class="stat" role="listitem"><b>1</b><span>Certified training program</span></div>
             <div class="stat" role="listitem"><b>3rd</b><span>Year, AI department</span></div>
+            </div>
           </div>
         </div>
       </section>
@@ -416,6 +428,10 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
           <article class="skill-card">
             <h3>Databases</h3>
             <div class="chips"><span class="chip">ERD Design</span><span class="chip">Relational Mapping</span><span class="chip">SQL</span></div>
+          </article>
+          <article class="skill-card">
+            <h3>Java</h3>
+            <div class="chips"><span class="chip">OOP</span><span class="chip">Classes &amp; Objects</span><span class="chip learning">Collections</span><span class="chip learning">JDBC</span></div>
           </article>
           <article class="skill-card">
             <h3>Soft Skills</h3>
@@ -506,6 +522,33 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
             </div>
             <div class="project-foot">
               <span class="tag-note">Placeholder, add your own project</span>
+              <div class="btn-row">
+                <a class="btn btn-primary btn-sm" href="#" data-placeholder="report" data-role="report">View Report</a>
+                <a class="btn btn-ghost btn-sm" href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener" data-role="github">GitHub Repo</a>
+                <a class="btn btn-ghost btn-sm" href="https://www.linkedin.com/" target="_blank" rel="noopener" data-role="linkedin" hidden>LinkedIn Post</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="preview" role="img" aria-label="Java project preview">
+              <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <g fill="var(--surface)" stroke="var(--fg)" stroke-width="1.3"><rect x="40" y="30" width="240" height="120" rx="6"/></g>
+                <g fill="var(--accent)"><rect x="40" y="30" width="240" height="14" rx="4"/></g>
+                <g stroke="var(--line)" stroke-width="2" stroke-linecap="round"><path d="M56 60h120M56 76h90M56 92h150M56 108h70M56 124h110"/></g>
+                <g fill="var(--accent)"><circle cx="252" cy="104" r="16" opacity="0.18"/><circle cx="252" cy="104" r="6"/></g>
+              </svg>
+            </div>
+            <div class="project-body">
+              <h3>Java Project</h3>
+              <dl>
+                <div class="pair"><dt>Problem</dt><dd>Replace this with the problem your Java program solves.</dd></div>
+                <div class="pair"><dt>Solution</dt><dd>Replace this with how you designed it, for example which classes you made and how they work together.</dd></div>
+              </dl>
+              <div class="chips"><span class="chip">Java</span><span class="chip">OOP</span></div>
+            </div>
+            <div class="project-foot">
+              <span class="tag-note">Placeholder, add your own Java project</span>
               <div class="btn-row">
                 <a class="btn btn-primary btn-sm" href="#" data-placeholder="report" data-role="report">View Report</a>
                 <a class="btn btn-ghost btn-sm" href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener" data-role="github">GitHub Repo</a>
