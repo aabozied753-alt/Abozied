@@ -804,7 +804,7 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
 
   function isAdmin() {
     try {
-      var s = JSON.parse(localStorage.getItem('pf-admin') || 'null');
+      var s = JSON.parse(sessionStorage.getItem('pf-admin') || 'null');
       return !!(s && s.email === ADMIN_EMAIL && s.exp > Date.now());
     } catch (e) { return false; }
   }
@@ -826,8 +826,13 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
       var c = parseJwt(resp.credential);
       var ok = c.email === ADMIN_EMAIL && c.email_verified === true && c.aud === GOOGLE_CLIENT_ID &&
                /^(https:\/\/)?accounts\.google\.com$/.test(c.iss) && c.exp * 1000 > Date.now();
-      if (!ok) { adminMsg.textContent = 'That Google account is not the admin account.'; return; }
-      localStorage.setItem('pf-admin', JSON.stringify({ email: c.email, exp: Date.now() + 12 * 3600 * 1000 }));
+      if (!ok) {
+        try { sessionStorage.removeItem('pf-admin'); } catch (e) {}
+        applyAdmin();
+        adminMsg.textContent = 'That Google account is not the admin account.';
+        return;
+      }
+      sessionStorage.setItem('pf-admin', JSON.stringify({ email: c.email, exp: Date.now() + 12 * 3600 * 1000 }));
       applyAdmin();
     } catch (e) { adminMsg.textContent = 'Sign-in failed. Please try again.'; }
   }
@@ -861,7 +866,7 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
     });
   });
   signOutBtn.addEventListener('click', function () {
-    try { localStorage.removeItem('pf-admin'); } catch (e) {}
+    try { sessionStorage.removeItem('pf-admin'); } catch (e) {}
     try { if (window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect(); } catch (e) {}
     adminMsg.textContent = 'Signed out.';
     applyAdmin();
