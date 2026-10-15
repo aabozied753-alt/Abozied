@@ -15,6 +15,15 @@
        d. Under Authorized JavaScript origins, add your site address, for example https://your-name.github.io
        e. Copy the Client ID and paste it in GOOGLE_CLIENT_ID in the script below, then upload the file again.
      The Admin link at the bottom of the page opens the sign-in. Sign-in only works on your own site, not inside the Claude preview.
+     (Once the backend in step 7 is on, this Admin link is hidden and the account button in the header replaces it.)
+  7. Backend (Firebase, free). Visitors can create accounts and leave recommendations, messages from the contact form reach an Admin
+     dashboard only you can see, and projects you add show up for everyone. The admin is the Gmail in window.PF_ADMIN_EMAIL. Set it up once:
+       a. Open console.firebase.google.com and create a project.
+       b. Build > Authentication > Get started. Turn on Google and Email/Password. Then Settings > Authorized domains > add your-name.github.io
+       c. Build > Firestore Database > Create database (production mode).
+       d. In Firestore open the Rules tab, paste everything from the firestore.rules file, press Publish.
+       e. Project settings (gear icon) > Your apps > Web app. Register it and copy the firebaseConfig values into window.PF_FIREBASE below.
+     Also change the Gmail inside firestore.rules if the admin address ever changes.
 -->
 <!--  (end of guide)
 -->
@@ -288,6 +297,45 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
 .add-chip { font: 500 0.76rem var(--font-mono); padding: 0.3rem 0.6rem; border-radius: 6px; background: transparent; color: var(--accent); border: 1px dashed var(--accent); cursor: pointer; }
 .icon-btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 
+/* Backend UI: account button, sign-in window, recommendations, admin dashboard */
+.icon-btn .initial { font: 700 0.95rem var(--font-body); line-height: 1; }
+.modal {
+  position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; overflow-y: auto;
+  background: color-mix(in srgb, var(--bg) 55%, rgba(0,0,0,0.6));
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.modal-panel {
+  position: relative; width: min(100%, 26rem); min-width: 0; display: grid; gap: 1rem;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1.6rem; box-shadow: 0 30px 60px -30px rgba(0,0,0,0.5);
+}
+.modal-panel.wide { width: min(100%, 36rem); }
+.modal-panel h2 { font-size: 1.4rem; font-weight: 700; padding-right: 2.5rem; }
+.modal-sub { color: var(--muted); font-size: 0.92rem; }
+.modal-close { position: absolute; top: 0.8rem; right: 0.8rem; width: 2.2rem; height: 2.2rem; font-size: 1.2rem; line-height: 1; }
+.modal form { gap: 0.9rem; }
+.or { display: flex; align-items: center; gap: 0.75rem; color: var(--muted); font: 500 0.74rem var(--font-mono); }
+.or::before, .or::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+.linklike { justify-self: start; background: transparent; border: 0; padding: 0; color: var(--accent); font: 500 0.86rem var(--font-body); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.badge { justify-self: start; font: 600 0.72rem var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; background: var(--accent); color: var(--accent-ink); padding: 0.2rem 0.55rem; border-radius: 6px; }
+#whoAmI { overflow-wrap: anywhere; color: var(--muted); }
+.t-list { display: grid; gap: 0.9rem; margin-bottom: 1rem; }
+.t-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.2rem; display: grid; gap: 0.6rem; }
+.t-card q { quotes: none; font-size: 1rem; overflow-wrap: anywhere; }
+.t-card small { font: 500 0.74rem var(--font-mono); color: var(--muted); }
+#tForm { margin-top: 1rem; }
+.admin-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin: -1.25rem 0 1.5rem; }
+.admin-row { display: flex; flex-wrap: wrap; gap: 0.5rem; border-top: 1px dashed var(--line); padding-top: 0.9rem; }
+.preview-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 2rem; }
+.dash-grid h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; }
+.dash-list { display: grid; gap: 0.8rem; align-content: start; }
+.dash-item { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; display: grid; gap: 0.6rem; min-width: 0; }
+.dash-item header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; font: 500 0.78rem var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
+.dash-item p { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.93rem; }
+.dash-item .btn-row { margin-top: 0.2rem; }
+.dash-empty { color: var(--muted); font-size: 0.9rem; }
+
 /* Motion: lift on hover for the important blocks, entrance for the hero, pulse for the status dot */
 .skill-card, .project, .service, .link-row, .cert, .stat, .chip {
   transition: transform 0.25s cubic-bezier(.2,.8,.3,1.2), border-color 0.2s ease, box-shadow 0.25s ease, background 0.2s ease;
@@ -342,6 +390,10 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
     <a class="btn btn-primary btn-sm header-cta" href="cv.pdf" download>Download CV</a>
     <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch light or dark theme">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <button class="icon-btn" id="authBtn" type="button" hidden aria-label="Sign in" title="Sign in">
+      <svg id="authIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span class="initial" id="authInitial" data-private hidden></span>
     </button>
     <button class="icon-btn" id="editBtn" type="button" hidden aria-label="Edit page text" aria-pressed="false" title="Edit this page">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
@@ -451,7 +503,12 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
           <h2>Selected work.</h2>
           <p>Each card shows the problem, what I built, and the tools I used.</p>
         </div>
-        <div class="projects-grid">
+        <div class="admin-tools" data-admin-only hidden>
+          <button class="btn btn-primary btn-sm" id="addProjectBtn" type="button">+ Add project</button>
+          <button class="btn btn-ghost btn-sm" id="importBtn" type="button">Import the sample projects</button>
+          <span class="form-status" id="toolsMsg" role="status" aria-live="polite"></span>
+        </div>
+        <div class="projects-grid" id="staticProjects" data-static>
 
           <article class="project">
             <div class="preview" role="img" aria-label="Bar chart preview of a Netflix content dashboard">
@@ -559,6 +616,7 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
           </article>
 
         </div>
+        <div class="projects-grid" id="liveProjects" data-live hidden></div>
       </section>
     </div>
   </div>
@@ -613,10 +671,21 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
           <div>
             <span class="eyebrow">Testimonials</span>
             <h3>What people say</h3>
-            <div class="quote">
+            <div class="t-list" id="liveTestimonials" data-live hidden></div>
+            <div class="quote" id="staticQuote" data-static>
               <q>Add a short recommendation from a lecturer, teammate or client here.</q>
               <small>Placeholder. Replace with a real quote and name.</small>
             </div>
+            <div style="margin-top:1rem">
+              <button class="btn btn-ghost btn-sm" id="tSignin" type="button" data-guest-only hidden>Sign in to leave a recommendation</button>
+            </div>
+            <form id="tForm" data-auth-only hidden novalidate>
+              <div class="field"><label for="tName">Your name</label><input id="tName" type="text" maxlength="80" autocomplete="name"></div>
+              <div class="field"><label for="tRole">Your role (optional)</label><input id="tRole" type="text" maxlength="60" placeholder="Lecturer, teammate, client..."></div>
+              <div class="field"><label for="tText">Your recommendation</label><textarea id="tText" maxlength="400" style="min-height:6rem"></textarea></div>
+              <div><button class="btn btn-primary btn-sm" type="submit">Send recommendation</button></div>
+              <p class="form-status" id="tStatus" role="status" aria-live="polite"></p>
+            </form>
           </div>
         </div>
       </section>
@@ -676,6 +745,82 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
   </div>
 </footer>
 
+<div class="band alt" id="dashboard" data-admin-only hidden>
+  <div class="wrap">
+    <section>
+      <div class="section-head">
+        <span class="eyebrow">Admin dashboard</span>
+        <h2>Messages and recommendations.</h2>
+        <p>Only you can see this section. Visitors never do.</p>
+      </div>
+      <div class="dash-grid">
+        <div>
+          <h3>Inbox <span id="msgCount" data-private></span></h3>
+          <div class="dash-list" id="msgList" data-private></div>
+        </div>
+        <div>
+          <h3>Recommendations to review</h3>
+          <div class="dash-list" id="pendList" data-private></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="modal" id="authModal" data-modal hidden role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="modal-panel">
+    <button class="icon-btn modal-close" type="button" data-close aria-label="Close">&times;</button>
+    <div id="authOut" style="display:contents">
+      <h2 id="authTitle">Sign in</h2>
+      <p class="modal-sub">Browsing the site never needs an account. Sign in to leave a recommendation.</p>
+      <button class="btn btn-ghost" id="googleBtn" type="button">
+        <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.5 0 20.1 0 24s.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+      <div class="or"><span>or use email</span></div>
+      <form id="authForm" novalidate>
+        <div class="field"><label for="aEmail">Email</label><input id="aEmail" type="email" autocomplete="email"></div>
+        <div class="field"><label for="aPass">Password</label><input id="aPass" type="password" autocomplete="current-password" minlength="6"></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="aSignIn" type="submit">Sign in</button>
+          <button class="btn btn-ghost" id="aSignUp" type="button">Create account</button>
+        </div>
+        <button class="linklike" id="aReset" type="button">Forgot password?</button>
+      </form>
+    </div>
+    <div id="authIn" style="display:contents" hidden>
+      <h2>Your account</h2>
+      <p id="whoAmI" data-private></p>
+      <span class="badge" id="adminBadge" hidden>Admin</span>
+      <p class="modal-sub" id="verifyNote" hidden>Check your inbox and open the verification link we sent.</p>
+      <button class="btn btn-ghost" id="signOutBtn2" type="button">Sign out</button>
+    </div>
+    <p class="form-status" id="authStatus" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
+<div class="modal" id="projModal" data-modal hidden role="dialog" aria-modal="true" aria-labelledby="projHeading">
+  <div class="modal-panel wide">
+    <button class="icon-btn modal-close" type="button" data-close aria-label="Close">&times;</button>
+    <h2 id="projHeading">Add project</h2>
+    <form id="projForm" novalidate>
+      <div class="field"><label for="pTitle">Title</label><input id="pTitle" type="text" maxlength="120"></div>
+      <div class="field"><label for="pProblem">Problem</label><textarea id="pProblem" maxlength="600" style="min-height:5rem"></textarea></div>
+      <div class="field"><label for="pSolution">Solution</label><textarea id="pSolution" maxlength="600" style="min-height:5rem"></textarea></div>
+      <div class="field"><label for="pTags">Tags (separate with commas)</label><input id="pTags" type="text" placeholder="Python, Pandas, Excel"></div>
+      <div class="field"><label for="pReport">Report or demo URL</label><input id="pReport" type="url" placeholder="https://"></div>
+      <div class="field"><label for="pGithub">GitHub URL</label><input id="pGithub" type="url" placeholder="https://github.com/"></div>
+      <div class="field"><label for="pLinkedin">LinkedIn post URL</label><input id="pLinkedin" type="url" placeholder="https://www.linkedin.com/"></div>
+      <div class="field"><label for="pImage">Preview image URL (optional)</label><input id="pImage" type="url" placeholder="https://"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="projSave" type="submit">Save project</button>
+        <button class="btn btn-ghost" type="button" data-close>Cancel</button>
+      </div>
+      <p class="form-status" id="projStatus" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+
 <div class="wrap admin-zone">
   <button class="admin-link" id="adminBtn" type="button" aria-expanded="false" aria-controls="adminPanel">Admin</button>
   <div class="admin-panel" id="adminPanel" hidden>
@@ -697,11 +842,25 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
 </div>
 
 <script>
+/* ===== BACKEND SETTINGS (Firebase) =====
+   Paste your firebaseConfig values here (guide, step 7, at the top of this file).
+   While the YOUR-... values are still here, the site runs as a plain static page. */
+window.PF_FIREBASE = {
+  apiKey: 'AIzaSyDCBYbCG1rClixofD_lQxRkJvaud9byhXs',
+  authDomain: 'abozied.firebaseapp.com',
+  projectId: 'abozied',
+  appId: '1:415646389966:web:91d7d6b715cf297357a29f'
+};
+window.PF_ADMIN_EMAIL = 'aabozied753@gmail.com';
+window.PF_BACKEND_ON = !/YOUR-/.test(window.PF_FIREBASE.apiKey + window.PF_FIREBASE.projectId);
+</script>
+
+<script>
 (function () {
   var root = document.documentElement;
 
   /* Saved edits (this browser only). Change VERSION when you restructure the page so old saves are ignored. */
-  var VERSION = 'v6';
+  var VERSION = 'v7';
   try {
     var raw = localStorage.getItem('pf-edits');
     var saved0 = raw ? JSON.parse(raw) : null;
@@ -782,6 +941,16 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
     var subject = 'Portfolio message from ' + name;
     var body = msg + '\n\n' + name + '\n' + email;
     var href = 'mailto:aabozied753@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    if (typeof window.pfSendMessage === 'function') {
+      status.textContent = 'Sending...';
+      window.pfSendMessage({ name: name, email: email, message: msg }).then(function () {
+        status.textContent = 'Message sent. Thank you, I will reply by email.';
+        form.reset();
+      }, function () {
+        status.innerHTML = 'Could not send it from the page. <a href="' + href + '">Open it in your email app</a>, or write to aabozied753@gmail.com directly.';
+      });
+      return;
+    }
     status.innerHTML = 'Your message is ready. <a href="' + href + '">Open it in your email app</a>, or write to aabozied753@gmail.com directly.';
   });
 
@@ -791,6 +960,8 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
   var editMsg = document.getElementById('editMsg');
   var editBtn = document.getElementById('editBtn');
   var editing = false;
+  window.pfSetAdmin = function (flag) { editBtn.hidden = !flag; if (!flag && editing) setEditing(false); };
+  if (window.PF_BACKEND_ON) { var az = document.querySelector('.admin-zone'); if (az) az.hidden = true; }
 
   /* Admin sign-in with Google. Visitors browse normally; only the admin Gmail unlocks the pencil.
      Set GOOGLE_CLIENT_ID first (steps are in the comment at the top of this file). */
@@ -872,7 +1043,7 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
     adminMsg.textContent = 'Signed out.';
     applyAdmin();
   });
-  applyAdmin();
+  if (!window.PF_BACKEND_ON) applyAdmin();
 
   var EDITABLE = 'h1,h2,h3,p,dt,dd,small,strong,q,.chip,.stat b,.stat span,.eyebrow,a.btn,.link-row span,.tag-note,.legend,.brand span';
   var SCOPES = 'main, footer, .brand';
@@ -880,10 +1051,19 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
 
   function say(t) { editMsg.textContent = t; }
 
+  /* Remove everything that comes from the database or from a signed-in session before saving or exporting the page */
+  function stripLive(c) {
+    Array.prototype.forEach.call(c.querySelectorAll('[data-live]'), function (n) { n.innerHTML = ''; n.setAttribute('hidden', ''); });
+    Array.prototype.forEach.call(c.querySelectorAll('[data-private]'), function (n) { n.textContent = ''; });
+    Array.prototype.forEach.call(c.querySelectorAll('[data-static]'), function (n) { n.removeAttribute('hidden'); });
+    Array.prototype.forEach.call(c.querySelectorAll('[data-auth-only], [data-guest-only], [data-admin-only], [data-modal], #authBtn, #editBtn, #authInitial'), function (n) { n.setAttribute('hidden', ''); });
+  }
+
   function cleanHTML(el) {
     var c = el.cloneNode(true);
     Array.prototype.forEach.call(c.querySelectorAll('[contenteditable]'), function (n) { n.removeAttribute('contenteditable'); });
     Array.prototype.forEach.call(c.querySelectorAll('.add-chip, .link-editor'), function (n) { n.remove(); });
+    stripLive(c);
     return c.innerHTML;
   }
   function saveEdits() {
@@ -902,6 +1082,7 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
     var bar = c.querySelector('#editBar'); if (bar) bar.remove();
     Array.prototype.forEach.call(c.querySelectorAll('[contenteditable]'), function (n) { n.removeAttribute('contenteditable'); });
     Array.prototype.forEach.call(c.querySelectorAll('.add-chip, .link-editor'), function (n) { n.remove(); });
+    stripLive(c);
     var b = c.querySelector('body'); if (b) b.classList.remove('editing');
     return '<!doctype html>\n' + c.outerHTML;
   }
@@ -913,13 +1094,15 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
     editBtn.setAttribute('aria-pressed', String(on));
     Array.prototype.forEach.call(document.querySelectorAll(SCOPES), function (scope) {
       Array.prototype.forEach.call(scope.querySelectorAll(EDITABLE), function (el) {
+        if (el.closest('[data-live], [data-private]')) return;
         if (on) el.setAttribute('contenteditable', 'true'); else el.removeAttribute('contenteditable');
       });
     });
     Array.prototype.forEach.call(document.querySelectorAll('.add-chip, .link-editor'), function (n) { n.remove(); });
     if (on) {
-      Array.prototype.forEach.call(document.querySelectorAll('main .project'), projectEditor);
+      Array.prototype.forEach.call(document.querySelectorAll('#staticProjects .project'), projectEditor);
       Array.prototype.forEach.call(document.querySelectorAll('main .chips'), function (c) {
+        if (c.closest('[data-live]')) return;
         var b = document.createElement('button');
         b.type = 'button'; b.className = 'add-chip'; b.textContent = '+ Add'; b.setAttribute('contenteditable', 'false');
         c.appendChild(b);
@@ -975,7 +1158,7 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
     if (rm) { rm.closest('.project').remove(); saveEdits(); }
   });
   document.getElementById('eAdd').addEventListener('click', function () {
-    var grid = document.querySelector('.projects-grid');
+    var grid = document.getElementById('staticProjects');
     var src = grid.lastElementChild;
     if (!src) return;
     var c = src.cloneNode(true);
@@ -1000,6 +1183,7 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
     say('New project added. Fill in the text and the links, then press Done.');
   });
 
+  if (window.PF_BACKEND_ON) document.getElementById('eAdd').hidden = true;
   editBtn.addEventListener('click', function () { setEditing(!editing); });
   document.getElementById('eDone').addEventListener('click', function () { saveEdits(); setEditing(false); });
 
@@ -1074,5 +1258,417 @@ body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover
     clearTimeout(saveTimer);
     saveTimer = setTimeout(saveEdits, 600);
   });
+})();
+</script>
+
+<script>
+/* Backend: accounts, projects, recommendations and messages (Firebase).
+   Runs only after window.PF_FIREBASE is filled in. Without it the site works as a plain static page. */
+(function () {
+  if (!window.PF_BACKEND_ON) return;
+
+  var ADMIN_EMAIL = window.PF_ADMIN_EMAIL;
+  var SDK = 'https://www.gstatic.com/firebasejs/10.12.2/';
+  var auth, store, user = null, admin = false;
+  var projectsCache = [], editingId = null;
+
+  var GENERIC_SVG =
+    '<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' +
+    '<g stroke="var(--line)" stroke-width="1"><line x1="28" y1="30" x2="296" y2="30"/><line x1="28" y1="70" x2="296" y2="70"/><line x1="28" y1="110" x2="296" y2="110"/><line x1="28" y1="150" x2="296" y2="150"/></g>' +
+    '<path d="M32 132 L82 118 L132 124 L182 84 L232 70 L290 40" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '<path d="M32 132 L82 118 L132 124 L182 84 L232 70 L290 40 V150 H32 Z" style="fill:var(--accent)" opacity="0.12"/>' +
+    '<circle cx="290" cy="40" r="5" style="fill:var(--accent)"/></svg>';
+
+  function $(id) { return document.getElementById(id); }
+  function qsa(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined && text !== null) n.textContent = text;
+    return n;
+  }
+  function safeUrl(u) { u = (u || '').trim(); return /^https?:\/\//i.test(u) ? u : ''; }
+  function stamp() { return firebase.firestore.FieldValue.serverTimestamp(); }
+  function toDate(t) { try { return t && t.toDate ? t.toDate() : null; } catch (e) { return null; } }
+  function fmt(d) { return d ? d.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : ''; }
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = src; s.onload = resolve;
+      s.onerror = function () { reject(new Error('Could not load ' + src)); };
+      document.head.appendChild(s);
+    });
+  }
+  function confirmClick(btn, label, action) {
+    if (btn.getAttribute('data-armed') === '1') { btn.removeAttribute('data-armed'); action(); return; }
+    var old = btn.textContent;
+    btn.setAttribute('data-armed', '1'); btn.textContent = label;
+    setTimeout(function () { btn.removeAttribute('data-armed'); btn.textContent = old; }, 3000);
+  }
+
+  /* ---------- Windows (modals) ---------- */
+  function openModal(id) {
+    var m = $(id); m.hidden = false;
+    var f = m.querySelector('input, textarea');
+    if (f && !m.querySelector('#authIn:not([hidden])')) setTimeout(function () { f.focus(); }, 30);
+  }
+  function closeModals() { qsa('[data-modal]').forEach(function (m) { m.hidden = true; }); }
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModals(); });
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    if (t.hasAttribute && t.hasAttribute('data-modal')) closeModals();
+    else if (t.closest && t.closest('[data-close]')) closeModals();
+  });
+
+  /* ---------- Accounts ---------- */
+  function authError(e) {
+    var map = {
+      'auth/invalid-email': 'That email address does not look right.',
+      'auth/missing-password': 'Enter your password.',
+      'auth/invalid-credential': 'Wrong email or password.',
+      'auth/wrong-password': 'Wrong email or password.',
+      'auth/user-not-found': 'Wrong email or password.',
+      'auth/email-already-in-use': 'An account with this email already exists. Try signing in.',
+      'auth/weak-password': 'Use a password with at least 6 characters.',
+      'auth/popup-closed-by-user': 'The sign-in window was closed.',
+      'auth/cancelled-popup-request': 'The sign-in window was closed.',
+      'auth/popup-blocked': 'Your browser blocked the sign-in window. Allow pop-ups and try again.',
+      'auth/unauthorized-domain': 'This site address is not allowed yet. In Firebase open Authentication, Settings, Authorized domains and add it.',
+      'auth/operation-not-allowed': 'This sign-in method is not turned on in Firebase yet.',
+      'auth/too-many-requests': 'Too many tries. Wait a few minutes and try again.',
+      'auth/network-request-failed': 'No connection. Check your internet and try again.'
+    };
+    return map[e && e.code] || 'Something went wrong. Please try again.';
+  }
+  function authStatus(t) { $('authStatus').textContent = t || ''; }
+
+  function updateUI() {
+    admin = !!(user && user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase() && user.emailVerified);
+    var btn = $('authBtn'), initial = $('authInitial'), icon = $('authIcon');
+    btn.hidden = false;
+    if (user) {
+      var label = (user.displayName || user.email || '?').trim();
+      initial.textContent = label.charAt(0).toUpperCase();
+      initial.hidden = false; icon.style.display = 'none';
+      btn.setAttribute('aria-label', 'Your account'); btn.title = 'Your account';
+    } else {
+      initial.textContent = ''; initial.hidden = true; icon.style.display = '';
+      btn.setAttribute('aria-label', 'Sign in'); btn.title = 'Sign in';
+    }
+    qsa('[data-auth-only]').forEach(function (n) { n.hidden = !user; });
+    qsa('[data-guest-only]').forEach(function (n) { n.hidden = !!user; });
+    qsa('[data-admin-only]').forEach(function (n) { n.hidden = !admin; });
+    $('authOut').hidden = !!user;
+    $('authIn').hidden = !user;
+    if (user) {
+      $('whoAmI').textContent = (user.displayName ? user.displayName + ' · ' : '') + (user.email || '');
+      $('adminBadge').hidden = !admin;
+      $('verifyNote').hidden = user.emailVerified !== false;
+      var tn = $('tName');
+      if (tn && !tn.value) tn.value = user.displayName || (user.email || '').split('@')[0];
+    }
+    if (window.pfSetAdmin) window.pfSetAdmin(admin);
+    renderProjects();
+    if (admin) loadDashboard();
+  }
+
+  /* ---------- Projects ---------- */
+  function linkBtn(cls, label, url) {
+    var a = el('a', 'btn btn-sm ' + cls, label);
+    a.href = url; a.target = '_blank'; a.rel = 'noopener';
+    return a;
+  }
+  function projectCard(p) {
+    var card = el('article', 'project');
+    card.setAttribute('data-id', p.id);
+
+    var prev = el('div', 'preview');
+    function generic() {
+      prev.innerHTML = GENERIC_SVG;
+      prev.setAttribute('role', 'img'); prev.setAttribute('aria-label', 'Project preview');
+    }
+    var img = safeUrl(p.imageUrl);
+    if (img) {
+      var im = document.createElement('img');
+      im.className = 'preview-img'; im.alt = p.title || 'Project preview'; im.loading = 'lazy';
+      im.onerror = function () { im.remove(); generic(); };
+      im.src = img;
+      prev.appendChild(im);
+    } else { generic(); }
+    card.appendChild(prev);
+
+    var bodyEl = el('div', 'project-body');
+    bodyEl.appendChild(el('h3', null, p.title || 'Untitled project'));
+    var dl = document.createElement('dl');
+    [['Problem', p.problem], ['Solution', p.solution]].forEach(function (pair) {
+      if (!pair[1]) return;
+      var d = el('div', 'pair');
+      d.appendChild(el('dt', null, pair[0]));
+      d.appendChild(el('dd', null, pair[1]));
+      dl.appendChild(d);
+    });
+    bodyEl.appendChild(dl);
+    if (p.tags && p.tags.length) {
+      var chips = el('div', 'chips');
+      p.tags.forEach(function (t) { chips.appendChild(el('span', 'chip', t)); });
+      bodyEl.appendChild(chips);
+    }
+    card.appendChild(bodyEl);
+
+    var foot = el('div', 'project-foot');
+    var row = el('div', 'btn-row');
+    var r = safeUrl(p.reportUrl), g = safeUrl(p.githubUrl), l = safeUrl(p.linkedinUrl);
+    if (r) row.appendChild(linkBtn('btn-primary', 'View Report', r));
+    if (g) row.appendChild(linkBtn('btn-ghost', 'GitHub Repo', g));
+    if (l) row.appendChild(linkBtn('btn-ghost', 'LinkedIn Post', l));
+    if (row.children.length) foot.appendChild(row);
+    if (admin) {
+      var ar = el('div', 'admin-row');
+      var eb = el('button', 'btn btn-ghost btn-sm', 'Edit'); eb.type = 'button';
+      eb.addEventListener('click', function () { openProjectForm(p); });
+      var db = el('button', 'btn btn-ghost btn-sm', 'Delete'); db.type = 'button';
+      db.addEventListener('click', function () {
+        confirmClick(db, 'Click again to delete', function () {
+          store.collection('projects').doc(p.id).delete().then(loadProjects, function () {
+            $('toolsMsg').textContent = 'Could not delete. Check the Firestore rules.';
+          });
+        });
+      });
+      ar.appendChild(eb); ar.appendChild(db);
+      foot.appendChild(ar);
+    }
+    card.appendChild(foot);
+    return card;
+  }
+  function renderProjects() {
+    var live = $('liveProjects'), stat = $('staticProjects');
+    if (!live || !stat) return;
+    live.innerHTML = '';
+    if (!projectsCache.length) { live.hidden = true; stat.hidden = false; }
+    else {
+      projectsCache.forEach(function (p) { live.appendChild(projectCard(p)); });
+      live.hidden = false; stat.hidden = true;
+    }
+    var imp = $('importBtn'); if (imp) imp.hidden = projectsCache.length > 0;
+  }
+  function loadProjects() {
+    return store.collection('projects').get().then(function (snap) {
+      projectsCache = snap.docs.map(function (d) { var o = d.data(); o.id = d.id; return o; })
+        .sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+      renderProjects();
+    }, function () { /* keep the cards written in the page if the read fails */ });
+  }
+  function openProjectForm(p) {
+    editingId = p ? p.id : null;
+    $('projHeading').textContent = p ? 'Edit project' : 'Add project';
+    $('pTitle').value = p ? (p.title || '') : '';
+    $('pProblem').value = p ? (p.problem || '') : '';
+    $('pSolution').value = p ? (p.solution || '') : '';
+    $('pTags').value = p && p.tags ? p.tags.join(', ') : '';
+    $('pReport').value = p ? (p.reportUrl || '') : '';
+    $('pGithub').value = p ? (p.githubUrl || '') : '';
+    $('pLinkedin').value = p ? (p.linkedinUrl || '') : '';
+    $('pImage').value = p ? (p.imageUrl || '') : '';
+    $('projStatus').textContent = '';
+    openModal('projModal');
+  }
+
+  /* ---------- Recommendations ---------- */
+  function loadTestimonials() {
+    return store.collection('testimonials').where('approved', '==', true).get().then(function (snap) {
+      var items = snap.docs.map(function (d) { return d.data(); }).sort(function (a, b) {
+        var da = toDate(a.createdAt), db = toDate(b.createdAt);
+        return (db ? db.getTime() : 0) - (da ? da.getTime() : 0);
+      });
+      var list = $('liveTestimonials');
+      list.innerHTML = '';
+      items.forEach(function (t) {
+        var c = el('div', 't-card');
+        c.appendChild(el('q', null, t.text));
+        c.appendChild(el('small', null, '— ' + t.name + (t.role ? ', ' + t.role : '')));
+        list.appendChild(c);
+      });
+      list.hidden = !items.length;
+      $('staticQuote').hidden = items.length > 0;
+    }, function () { /* keep the placeholder if the read fails */ });
+  }
+
+  /* ---------- Admin dashboard ---------- */
+  function loadDashboard() {
+    store.collection('messages').orderBy('createdAt', 'desc').limit(50).get().then(function (snap) {
+      var list = $('msgList');
+      list.innerHTML = '';
+      $('msgCount').textContent = snap.size ? '(' + snap.size + ')' : '';
+      if (!snap.size) { list.appendChild(el('p', 'dash-empty', 'No messages yet.')); return; }
+      snap.docs.forEach(function (d) {
+        var m = d.data();
+        var it = el('div', 'dash-item');
+        var h = el('header');
+        h.appendChild(el('span', null, (m.name || '') + ' · ' + (m.email || '')));
+        h.appendChild(el('span', null, fmt(toDate(m.createdAt))));
+        it.appendChild(h);
+        it.appendChild(el('p', null, m.message || ''));
+        var del = el('button', 'btn btn-ghost btn-sm', 'Delete'); del.type = 'button';
+        del.addEventListener('click', function () {
+          confirmClick(del, 'Click again to delete', function () {
+            store.collection('messages').doc(d.id).delete().then(loadDashboard);
+          });
+        });
+        it.appendChild(del);
+        list.appendChild(it);
+      });
+    }, function () { $('msgList').textContent = 'Could not load messages. Check that the Firestore rules are published.'; });
+
+    store.collection('testimonials').where('approved', '==', false).get().then(function (snap) {
+      var list = $('pendList');
+      list.innerHTML = '';
+      if (!snap.size) { list.appendChild(el('p', 'dash-empty', 'Nothing waiting for review.')); return; }
+      snap.docs.forEach(function (d) {
+        var t = d.data();
+        var it = el('div', 'dash-item');
+        var h = el('header');
+        h.appendChild(el('span', null, (t.name || '') + (t.role ? ' · ' + t.role : '')));
+        h.appendChild(el('span', null, fmt(toDate(t.createdAt))));
+        it.appendChild(h);
+        it.appendChild(el('p', null, t.text || ''));
+        var row = el('div', 'btn-row');
+        var ok = el('button', 'btn btn-primary btn-sm', 'Approve'); ok.type = 'button';
+        ok.addEventListener('click', function () {
+          store.collection('testimonials').doc(d.id).update({ approved: true }).then(function () { loadDashboard(); loadTestimonials(); });
+        });
+        var del = el('button', 'btn btn-ghost btn-sm', 'Delete'); del.type = 'button';
+        del.addEventListener('click', function () {
+          confirmClick(del, 'Click again to delete', function () {
+            store.collection('testimonials').doc(d.id).delete().then(loadDashboard);
+          });
+        });
+        row.appendChild(ok); row.appendChild(del);
+        it.appendChild(row);
+        list.appendChild(it);
+      });
+    }, function () { $('pendList').textContent = 'Could not load recommendations. Check that the Firestore rules are published.'; });
+  }
+
+  /* ---------- Wire everything once the SDK is ready ---------- */
+  function wire() {
+    $('authBtn').addEventListener('click', function () { authStatus(''); openModal('authModal'); });
+    $('tSignin').addEventListener('click', function () { authStatus(''); openModal('authModal'); });
+
+    $('googleBtn').addEventListener('click', function () {
+      authStatus('');
+      auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(closeModals, function (e) { authStatus(authError(e)); });
+    });
+    $('authForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var em = $('aEmail').value.trim(), pw = $('aPass').value;
+      if (!em || !pw) { authStatus('Enter your email and password.'); return; }
+      auth.signInWithEmailAndPassword(em, pw).then(function () { $('aPass').value = ''; closeModals(); }, function (err) { authStatus(authError(err)); });
+    });
+    $('aSignUp').addEventListener('click', function () {
+      var em = $('aEmail').value.trim(), pw = $('aPass').value;
+      if (!em || !pw) { authStatus('Enter an email and a password with at least 6 characters.'); return; }
+      auth.createUserWithEmailAndPassword(em, pw).then(function (cred) {
+        $('aPass').value = '';
+        cred.user.sendEmailVerification().catch(function () {});
+        authStatus('Account created. We sent a verification link to your email.');
+      }, function (err) { authStatus(authError(err)); });
+    });
+    $('aReset').addEventListener('click', function () {
+      var em = $('aEmail').value.trim();
+      if (!em) { authStatus('Type your email above first.'); return; }
+      auth.sendPasswordResetEmail(em).then(function () { authStatus('Password reset link sent. Check your inbox.'); }, function (err) { authStatus(authError(err)); });
+    });
+    $('signOutBtn2').addEventListener('click', function () { auth.signOut().then(function () { authStatus(''); closeModals(); }); });
+
+    $('addProjectBtn').addEventListener('click', function () { openProjectForm(null); });
+    $('projForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var st = $('projStatus');
+      var data = {
+        title: $('pTitle').value.trim(),
+        problem: $('pProblem').value.trim(),
+        solution: $('pSolution').value.trim(),
+        tags: $('pTags').value.split(',').map(function (t) { return t.trim().slice(0, 30); }).filter(Boolean).slice(0, 8),
+        reportUrl: $('pReport').value.trim(),
+        githubUrl: $('pGithub').value.trim(),
+        linkedinUrl: $('pLinkedin').value.trim(),
+        imageUrl: $('pImage').value.trim()
+      };
+      if (!data.title) { st.textContent = 'Add a title.'; return; }
+      var urls = [['reportUrl', 'Report URL'], ['githubUrl', 'GitHub URL'], ['linkedinUrl', 'LinkedIn URL'], ['imageUrl', 'Image URL']];
+      for (var i = 0; i < urls.length; i++) {
+        var v = data[urls[i][0]];
+        if (v && !safeUrl(v)) { st.textContent = urls[i][1] + ' must start with http:// or https://'; return; }
+      }
+      var op;
+      if (editingId) op = store.collection('projects').doc(editingId).update(data);
+      else { data.order = Date.now(); data.createdAt = stamp(); op = store.collection('projects').add(data); }
+      $('projSave').disabled = true;
+      op.then(function () { closeModals(); return loadProjects(); },
+              function () { st.textContent = 'Could not save. Sign in with the admin account and make sure the Firestore rules are published.'; })
+        .then(function () { $('projSave').disabled = false; });
+    });
+    $('importBtn').addEventListener('click', function () {
+      var cards = qsa('#staticProjects .project').filter(function (c) { return !c.querySelector('.tag-note'); });
+      var msg = $('toolsMsg');
+      if (!cards.length) { msg.textContent = 'There are no sample projects to import.'; return; }
+      var batch = store.batch(), base = Date.now();
+      cards.forEach(function (c, i) {
+        var dds = c.querySelectorAll('dd');
+        var href = function (role) {
+          var a = c.querySelector('[data-role="' + role + '"]');
+          var h = a ? a.getAttribute('href') : '';
+          if (!a || a.hidden || !safeUrl(h) || h.indexOf('YOUR-USERNAME') !== -1 || h === 'https://www.linkedin.com/') return '';
+          return h;
+        };
+        batch.set(store.collection('projects').doc(), {
+          title: c.querySelector('h3').textContent.trim(),
+          problem: dds[0] ? dds[0].textContent.trim() : '',
+          solution: dds[1] ? dds[1].textContent.trim() : '',
+          tags: Array.prototype.map.call(c.querySelectorAll('.chip'), function (x) { return x.textContent.trim(); }),
+          reportUrl: href('report'), githubUrl: href('github'), linkedinUrl: href('linkedin'), imageUrl: '',
+          order: base + i, createdAt: stamp()
+        });
+      });
+      batch.commit().then(function () { msg.textContent = 'Imported. They now come from the database.'; return loadProjects(); },
+                          function () { msg.textContent = 'Could not import. Sign in with the admin account and publish the Firestore rules.'; });
+    });
+
+    $('tForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var st = $('tStatus');
+      if (!user) { st.textContent = 'Please sign in first.'; return; }
+      var name = $('tName').value.trim(), role = $('tRole').value.trim(), text = $('tText').value.trim();
+      if (!name || text.length < 10) { st.textContent = 'Add your name and a recommendation of at least 10 characters.'; return; }
+      store.collection('testimonials').add({
+        uid: user.uid, name: name.slice(0, 80), role: role.slice(0, 60), text: text.slice(0, 400),
+        approved: false, createdAt: stamp()
+      }).then(function () {
+        $('tText').value = '';
+        st.textContent = 'Thank you. Your recommendation will appear after I approve it.';
+      }, function () { st.textContent = 'Could not send it. Please try again.'; });
+    });
+
+    window.pfSendMessage = function (d) {
+      return store.collection('messages').add({
+        name: String(d.name).slice(0, 80), email: String(d.email).slice(0, 120), message: String(d.message).slice(0, 2000),
+        uid: user ? user.uid : null, createdAt: stamp()
+      });
+    };
+  }
+
+  loadScript(SDK + 'firebase-app-compat.js')
+    .then(function () { return loadScript(SDK + 'firebase-auth-compat.js'); })
+    .then(function () { return loadScript(SDK + 'firebase-firestore-compat.js'); })
+    .then(function () {
+      firebase.initializeApp(window.PF_FIREBASE);
+      auth = firebase.auth();
+      store = firebase.firestore();
+      wire();
+      auth.onAuthStateChanged(function (u) { user = u; updateUI(); });
+      loadProjects();
+      loadTestimonials();
+    })
+    .catch(function () { /* blocked or offline: the page keeps working without the backend */ });
 })();
 </script>
