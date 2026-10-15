@@ -1,0 +1,1029 @@
+<title>Ahmed Abu Zaid Portfolio</title>
+<!--
+  HOW TO EDIT THIS PAGE (all text lives in the HTML below, no build step):
+  1. Text: search for the words you want to change (e.g. "Netflix Content Dashboard") and edit them.
+  2. Skills: each skill is <span class="chip">Name</span>. Add or delete a chip. Use class="chip learning" for a skill you are still learning.
+  3. Projects: copy a whole <article class="project">...</article> block to add a project; change the title, Problem, Solution and tags.
+  4. Links: replace YOUR-USERNAME (GitHub) and put cv.pdf next to this file. Search "href=" to find the rest.
+  5. Colors: change the values at the top of <style> (--accent, --bg, ...). The dark theme has its own values just below.
+  6. Admin sign-in (Google): visitors see the page normally. Only the Gmail in ADMIN_EMAIL (search for it in the script) can unlock the edit pencil.
+     Set it up once:
+       a. Open console.cloud.google.com and create a project (free).
+       b. Go to APIs & Services > OAuth consent screen, choose External, fill the app name and your email, save.
+       c. Go to Credentials > Create credentials > OAuth client ID > Web application.
+       d. Under Authorized JavaScript origins, add your site address, for example https://your-name.github.io
+       e. Copy the Client ID and paste it in GOOGLE_CLIENT_ID in the script below, then upload the file again.
+     The Admin link at the bottom of the page opens the sign-in. Sign-in only works on your own site, not inside the Claude preview.
+-->
+<!--  (end of guide)
+-->
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single-column minimalist page, one sticky header, alternating surface bands, cards only where content is a discrete object. */
+:root {
+  --bg: #F5F7F9;
+  --surface: #FFFFFF;
+  --surface-2: #EBEFF3;
+  --fg: #17212B;
+  --muted: #5B6877;
+  --line: #DCE2E8;
+  --accent: #2B5F8C;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E1ECF5;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --radius: 10px;
+  --maxw: 68rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F151B; --surface: #161E26; --surface-2: #1C2630; --fg: #E8EDF2; --muted: #97A4B2;
+    --line: #27323D; --accent: #7FB2DC; --accent-ink: #0F151B; --accent-soft: #1B2B3A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F151B; --surface: #161E26; --surface-2: #1C2630; --fg: #E8EDF2; --muted: #97A4B2;
+  --line: #27323D; --accent: #7FB2DC; --accent-ink: #0F151B; --accent-soft: #1B2B3A; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 1rem; line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.12; margin: 0; text-wrap: balance; letter-spacing: -0.02em; }
+p { margin: 0; }
+a { color: inherit; }
+ul { margin: 0; padding: 0; list-style: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+.wrap {
+  width: 100%; max-width: var(--maxw); margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.band { background: var(--bg); }
+.band.alt { background: var(--surface); border-block: 1px solid var(--line); }
+section { padding-block: clamp(3.5rem, 8vw, 6rem); }
+.eyebrow {
+  font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 0.75rem; display: block;
+}
+.section-head { display: grid; gap: 0.75rem; margin-bottom: 2.5rem; max-width: 40rem; }
+.section-head h2 { font-size: clamp(1.7rem, 3.6vw, 2.4rem); font-weight: 700; }
+.section-head p { color: var(--muted); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  font: 600 0.95rem/1 var(--font-body); text-decoration: none;
+  padding: 0.85rem 1.25rem; border-radius: 8px; border: 1px solid transparent; cursor: pointer;
+  position: relative; overflow: hidden; isolation: isolate;
+  transition: transform 0.2s cubic-bezier(.2,.8,.3,1.2), box-shadow 0.2s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover { transform: translateY(-3px); box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--accent) 70%, transparent); }
+.btn:active { transform: translateY(0) scale(0.96); box-shadow: none; }
+.btn-primary::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; transform: translateX(-120%) skewX(-20deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+}
+.btn-primary:hover::after { transform: translateX(120%) skewX(-20deg); transition: transform 0.6s ease; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--accent); }
+.btn-sm { padding: 0.6rem 0.95rem; font-size: 0.86rem; }
+
+/* Header */
+.site-header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.header-row { display: flex; align-items: center; gap: 1rem; min-height: 4rem; }
+.brand { display: grid; line-height: 1.2; text-decoration: none; margin-right: auto; min-width: 0; }
+.brand strong { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; }
+.brand span { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.04em; }
+.nav { display: flex; gap: 0.4rem; }
+.nav a:not(.btn) {
+  text-decoration: none; font-size: 0.9rem; font-weight: 600; color: var(--fg);
+  padding: 0.55rem 0.9rem; border-radius: 8px; background: var(--surface); border: 1px solid var(--line);
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.nav a:not(.btn):hover { border-color: var(--accent); transform: translateY(-1px); }
+.nav a:not(.btn).active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.icon-btn {
+  width: 2.5rem; height: 2.5rem; display: inline-grid; place-items: center; flex: none;
+  background: transparent; color: var(--fg); border: 1px solid var(--line); border-radius: 8px; cursor: pointer;
+}
+.icon-btn:hover { border-color: var(--accent); }
+.menu-btn { display: none; }
+.header-cta { white-space: nowrap; }
+
+@media (max-width: 62rem) {
+  .menu-btn { display: inline-grid; }
+  .header-cta { display: none; }
+  .nav {
+    display: none; position: absolute; left: 0; right: 0; top: 100%;
+    flex-direction: column; background: var(--surface); border-bottom: 1px solid var(--line);
+    padding: 0.5rem max(16px, env(safe-area-inset-right, 0px)) 1rem max(16px, env(safe-area-inset-left, 0px));
+  }
+  .nav.open { display: flex; }
+  .nav { gap: 0.5rem; }
+  .nav a:not(.btn) { padding: 0.85rem 1rem; font-size: 1rem; text-align: center; }
+  .nav .nav-cta { display: inline-flex; margin-top: 0.5rem; }
+}
+@media (min-width: 62.01rem) { .nav .nav-cta { display: none; } }
+
+/* Hero */
+.hero { padding-block: clamp(3rem, 9vw, 6.5rem) clamp(3rem, 8vw, 5.5rem); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 4.5rem); align-items: center; }
+.hero h1 { font-size: clamp(2.3rem, 6vw, 4rem); font-weight: 700; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-lead { margin-top: 1.25rem; color: var(--muted); font-size: 1.1rem; max-width: 34rem; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+.hero-status { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); margin-bottom: 1.25rem; }
+.dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #3FA37A; }
+
+.query {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; min-width: 0;
+}
+.query-bar { display: flex; align-items: center; gap: 0.4rem; padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.query-bar i { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--line); display: block; }
+.query-bar span { margin-left: auto; font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
+.query pre {
+  margin: 0; padding: 1.1rem 1.1rem 1.25rem; overflow-x: auto;
+  font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.75; color: var(--fg);
+}
+.query .k { color: var(--accent); font-weight: 500; }
+.query .c { color: var(--muted); }
+@media (max-width: 52rem) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* About */
+.about-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 4rem); align-items: start; }
+.about-text { display: grid; gap: 1rem; color: var(--muted); max-width: 38rem; }
+.about-text p:first-child { color: var(--fg); font-size: 1.15rem; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.stat { background: var(--surface); padding: 1.4rem 1.25rem; display: grid; gap: 0.25rem; }
+.stat b { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 0.85rem; color: var(--muted); }
+.band.alt .stat { background: var(--bg); }
+@media (max-width: 52rem) { .about-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Skills */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1rem; }
+.skill-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.4rem; display: grid; gap: 1rem; align-content: start; min-width: 0; }
+.skill-card h3 { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.chip { font-family: var(--font-mono); font-size: 0.76rem; padding: 0.3rem 0.6rem; border-radius: 6px; background: var(--surface-2); color: var(--fg); border: 1px solid var(--line); }
+.chip.learning { background: transparent; border-style: dashed; color: var(--muted); }
+.legend { margin-top: 1.25rem; font-size: 0.82rem; color: var(--muted); font-family: var(--font-mono); }
+
+/* Projects */
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.25rem; }
+.project { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.band.alt .project { background: var(--bg); }
+.preview { background: var(--accent-soft); border-bottom: 1px solid var(--line); aspect-ratio: 16 / 9; max-width: 100%; display: grid; place-items: center; }
+.preview svg { width: 100%; height: 100%; display: block; }
+.project-body { padding: 1.4rem; display: grid; gap: 1rem; flex: 1; align-content: start; }
+.project h3 { font-size: 1.25rem; font-weight: 700; }
+.pair { display: grid; gap: 0.2rem; }
+.pair dt { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+.pair dd { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.project dl { margin: 0; display: grid; gap: 0.8rem; }
+.project-foot { margin-top: auto; padding: 0 1.4rem 1.4rem; display: grid; gap: 1rem; }
+.tag-note { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); border: 1px dashed var(--line); border-radius: 6px; padding: 0.15rem 0.5rem; justify-self: start; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+/* Services */
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--line); gap: 1px; }
+.service { background: var(--bg); padding: 1.6rem 1.4rem; display: grid; gap: 0.7rem; align-content: start; min-width: 0; }
+.service svg { width: 1.6rem; height: 1.6rem; color: var(--accent); }
+.service h3 { font-size: 1.05rem; font-weight: 600; }
+.service p { color: var(--muted); font-size: 0.93rem; }
+
+/* Credentials */
+.cred-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 3.5rem); }
+.cred-grid h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.25rem; }
+.cert { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.3rem; display: grid; gap: 0.35rem; }
+.cert small { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+.cert strong { font-weight: 600; font-size: 1.05rem; }
+.cert span { color: var(--muted); font-size: 0.92rem; }
+.quote { border: 1px dashed var(--line); border-radius: var(--radius); padding: 1.3rem; display: grid; gap: 0.8rem; color: var(--muted); }
+.quote q { font-size: 1.02rem; color: var(--fg); quotes: none; }
+.quote small { font-family: var(--font-mono); font-size: 0.74rem; }
+@media (max-width: 52rem) { .cred-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Contact */
+.contact-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 4rem); align-items: start; }
+form { display: grid; gap: 1rem; }
+.field { display: grid; gap: 0.4rem; }
+label { font-size: 0.86rem; font-weight: 600; }
+input, textarea {
+  width: 100%; font: inherit; color: var(--fg); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 8px; padding: 0.8rem 0.9rem;
+}
+textarea { min-height: 9rem; resize: vertical; }
+input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.form-status { font-size: 0.9rem; color: var(--muted); min-height: 1.4em; }
+.form-status a { color: var(--accent); }
+.links { display: grid; gap: 0.75rem; }
+.link-row { display: flex; align-items: center; gap: 0.9rem; padding: 0.95rem 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; min-width: 0; }
+.link-row:hover { border-color: var(--accent); }
+.link-row svg { width: 1.3rem; height: 1.3rem; color: var(--accent); flex: none; }
+.link-row div { display: grid; min-width: 0; line-height: 1.35; }
+.link-row small { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.link-row span { overflow-wrap: anywhere; font-size: 0.93rem; }
+.copy { margin-left: auto; flex: none; font: 500 0.78rem var(--font-mono); background: var(--surface-2); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 0.35rem 0.6rem; cursor: pointer; }
+.link-wrap { display: flex; align-items: stretch; gap: 0.5rem; }
+.link-wrap .link-row { flex: 1; }
+@media (max-width: 52rem) { .contact-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Footer */
+footer { border-top: 1px solid var(--line); padding-block: 1.75rem; color: var(--muted); font-size: 0.88rem; }
+.foot-row { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; justify-content: space-between; align-items: center; }
+.foot-row a { color: var(--fg); text-underline-offset: 3px; }
+
+/* Project link editor (edit mode only) */
+.link-editor { display: grid; gap: 0.6rem; border-top: 1px dashed var(--line); padding-top: 1rem; }
+.link-editor label { display: grid; gap: 0.25rem; font: 500 0.74rem var(--font-mono); color: var(--muted); }
+.link-editor input { padding: 0.55rem 0.7rem; font-size: 0.85rem; }
+.link-editor .btn { justify-self: start; }
+
+/* Admin sign-in */
+.admin-zone { display: grid; gap: 0.75rem; justify-items: start; padding-block: 0.75rem 1.5rem; }
+.admin-link { font: 500 0.78rem var(--font-mono); color: var(--muted); background: transparent; border: 0; padding: 0.3rem 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.admin-link:hover { color: var(--fg); }
+.admin-panel { display: grid; gap: 0.75rem; justify-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; max-width: 100%; min-width: 0; }
+.admin-panel p { font-size: 0.88rem; color: var(--muted); overflow-wrap: anywhere; }
+
+/* Edit mode */
+.edit-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1rem;
+  background: var(--surface); border-top: 1px solid var(--accent); box-shadow: 0 -10px 30px -18px rgba(0,0,0,0.5);
+  padding: 0.75rem max(16px, env(safe-area-inset-right, 0px)) calc(0.75rem + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.edit-bar p { font-size: 0.85rem; color: var(--muted); flex: 1 1 18rem; min-width: 0; }
+.edit-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+body.editing { padding-bottom: 8rem; }
+body.editing [contenteditable="true"] { outline: 1px dashed color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 3px; border-radius: 3px; cursor: text; }
+body.editing [contenteditable="true"]:focus { outline: 2px solid var(--accent); background: var(--accent-soft); }
+body.editing .project:hover, body.editing .skill-card:hover, body.editing .cert:hover, body.editing .service:hover,
+body.editing .stat:hover, body.editing .link-row:hover, body.editing .chip:hover, body.editing .btn:hover { transform: none; box-shadow: none; }
+.add-chip { font: 500 0.76rem var(--font-mono); padding: 0.3rem 0.6rem; border-radius: 6px; background: transparent; color: var(--accent); border: 1px dashed var(--accent); cursor: pointer; }
+.icon-btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+/* Motion: lift on hover for the important blocks, entrance for the hero, pulse for the status dot */
+.skill-card, .project, .service, .link-row, .cert, .stat, .chip {
+  transition: transform 0.25s cubic-bezier(.2,.8,.3,1.2), border-color 0.2s ease, box-shadow 0.25s ease, background 0.2s ease;
+}
+.skill-card:hover, .project:hover, .cert:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 16px 30px -18px color-mix(in srgb, var(--accent) 60%, transparent); }
+.service:hover, .stat:hover { transform: translateY(-4px); }
+.link-row:hover { transform: translateX(6px); box-shadow: 0 10px 22px -16px color-mix(in srgb, var(--accent) 70%, transparent); }
+.chip:hover { transform: translateY(-2px) scale(1.06); border-color: var(--accent); }
+.service svg, .link-row svg { transition: transform 0.3s cubic-bezier(.2,.8,.3,1.4); }
+.service:hover svg { transform: rotate(-8deg) scale(1.2); }
+.link-row:hover svg { transform: scale(1.2); }
+.preview svg { transition: transform 0.5s ease; }
+.project:hover .preview svg { transform: scale(1.06); }
+.copy { transition: transform 0.15s ease, border-color 0.15s ease; }
+.copy:hover { border-color: var(--accent); transform: translateY(-2px); }
+.copy:active, .icon-btn:active { transform: scale(0.92); }
+.icon-btn { transition: transform 0.2s ease, border-color 0.15s ease; }
+.icon-btn:hover { transform: rotate(15deg); }
+.dot { animation: pulse 2s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(63,163,122,0.55); } 100% { box-shadow: 0 0 0 10px rgba(63,163,122,0); } }
+@keyframes rise { from { transform: translateY(14px); } to { transform: none; } }
+.hero-grid > div:first-child > * { animation: rise 0.7s cubic-bezier(.2,.8,.3,1) both; }
+.hero-grid > div:first-child > *:nth-child(2) { animation-delay: 0.08s; }
+.hero-grid > div:first-child > *:nth-child(3) { animation-delay: 0.16s; }
+.hero-grid > div:first-child > *:nth-child(4) { animation-delay: 0.24s; }
+.query { animation: float 6s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .btn:hover, .skill-card:hover, .project:hover, .cert:hover, .service:hover, .stat:hover,
+  .link-row:hover, .chip:hover, .copy:hover, .icon-btn:hover { transform: none; }
+}
+</style>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="#home" aria-label="Ahmed Abu Zaid, home">
+      <strong>Ahmed Abu Zaid</strong>
+      <span>Data Analysis · Databases · AI</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+      <a class="btn btn-primary nav-cta" href="cv.pdf" download>Download CV</a>
+    </nav>
+    <a class="btn btn-primary btn-sm header-cta" href="cv.pdf" download>Download CV</a>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch light or dark theme">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <button class="icon-btn" id="editBtn" type="button" hidden aria-label="Edit page text" aria-pressed="false" title="Edit this page">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
+    </button>
+    <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="band" id="home">
+    <div class="wrap hero">
+      <div class="hero-grid">
+        <div>
+          <p class="hero-status"><span class="dot" aria-hidden="true"></span>Open to internships and freelance work</p>
+          <h1>I turn raw data into <em>clear decisions</em>.</h1>
+          <p class="hero-lead">AI student at Beni-Suef University who cleans, models and visualizes data. I build dashboards and database designs that make the numbers easy to act on.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">View My Work</a>
+            <a class="btn btn-ghost" href="cv.pdf" download>Download CV</a>
+          </div>
+        </div>
+        <div class="query" aria-hidden="true">
+          <div class="query-bar"><i></i><i></i><i></i><span>insights.sql</span></div>
+<pre><span class="c">-- what I do, in one query</span>
+<span class="k">SELECT</span> clean_data,
+       clear_charts,
+       useful_insight
+<span class="k">FROM</span>   messy_dataset
+<span class="k">WHERE</span>  problem = <span class="k">'understood'</span>
+<span class="k">ORDER BY</span> impact <span class="k">DESC</span>;</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band alt" id="about">
+    <div class="wrap">
+      <section>
+        <div class="section-head">
+          <span class="eyebrow">About me</span>
+          <h2>Careful with details, curious about patterns.</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-text">
+            <p>I study Artificial Intelligence in my third year at the Faculty of Computers and Artificial Intelligence, Beni-Suef University.</p>
+            <p>I enjoy the part of data work where a messy spreadsheet becomes a story: cleaning columns, finding the pattern, then choosing the one chart that shows it. I also design relational databases, from the ERD to the mapping schema.</p>
+            <p>When I hit a problem, I break it into small checks, test each one, and write down what I found. I have learned SQL for querying data, and I am now learning Power BI and Machine Learning to take on bigger datasets.</p>
+          </div>
+          <div class="stats" role="list">
+            <div class="stat" role="listitem"><b>2</b><span>Featured projects</span></div>
+            <div class="stat" role="listitem"><b>4</b><span>Database systems modeled</span></div>
+            <div class="stat" role="listitem"><b>1</b><span>Certified training program</span></div>
+            <div class="stat" role="listitem"><b>3rd</b><span>Year, AI department</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="band" id="skills">
+    <div class="wrap">
+      <section>
+        <div class="section-head">
+          <span class="eyebrow">Skills &amp; tech stack</span>
+          <h2>The tools I work with.</h2>
+          <p>Dashed tags are skills I am learning right now.</p>
+        </div>
+        <div class="skills-grid">
+          <article class="skill-card">
+            <h3>Programming Languages</h3>
+            <div class="chips"><span class="chip">Python</span><span class="chip">C++</span><span class="chip">Java</span><span class="chip">HTML</span><span class="chip">CSS</span></div>
+          </article>
+          <article class="skill-card">
+            <h3>Data Analysis &amp; BI Tools</h3>
+            <div class="chips"><span class="chip">Pandas</span><span class="chip">NumPy</span><span class="chip">Matplotlib</span><span class="chip">Excel Pivot Tables</span><span class="chip">Excel Dashboards</span><span class="chip learning">Power BI</span><span class="chip learning">Machine Learning</span></div>
+          </article>
+          <article class="skill-card">
+            <h3>Databases</h3>
+            <div class="chips"><span class="chip">ERD Design</span><span class="chip">Relational Mapping</span><span class="chip">SQL</span></div>
+          </article>
+          <article class="skill-card">
+            <h3>Soft Skills</h3>
+            <div class="chips"><span class="chip">Problem Solving</span><span class="chip">Attention to Detail</span><span class="chip">Data Storytelling</span></div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="band alt" id="projects">
+    <div class="wrap">
+      <section>
+        <div class="section-head">
+          <span class="eyebrow">Projects</span>
+          <h2>Selected work.</h2>
+          <p>Each card shows the problem, what I built, and the tools I used.</p>
+        </div>
+        <div class="projects-grid">
+
+          <article class="project">
+            <div class="preview" role="img" aria-label="Bar chart preview of a Netflix content dashboard">
+              <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <g stroke="var(--line)" stroke-width="1"><line x1="28" y1="30" x2="296" y2="30"/><line x1="28" y1="70" x2="296" y2="70"/><line x1="28" y1="110" x2="296" y2="110"/><line x1="28" y1="150" x2="296" y2="150"/></g>
+                <g style="fill:var(--accent)"><rect x="44" y="96" width="30" height="54" rx="3"/><rect x="88" y="70" width="30" height="80" rx="3"/><rect x="132" y="44" width="30" height="106" rx="3"/><rect x="176" y="82" width="30" height="68" rx="3"/><rect x="220" y="112" width="30" height="38" rx="3"/><rect x="264" y="128" width="22" height="22" rx="3"/></g>
+                <rect x="132" y="44" width="30" height="106" rx="3" style="fill:none;stroke:var(--fg)" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="project-body">
+              <h3>Netflix Content Dashboard</h3>
+              <dl>
+                <div class="pair"><dt>Problem</dt><dd>The Netflix titles file listed thousands of rows with several genres packed into one cell, so trends were hard to see.</dd></div>
+                <div class="pair"><dt>Solution</dt><dd>Cleaned the genre column, then built a multi-sheet Excel dashboard with Pivot Tables, distribution statistics and Pie, Bar and Line charts.</dd></div>
+              </dl>
+              <div class="chips"><span class="chip">Excel</span><span class="chip">Pivot Tables</span><span class="chip">Data Cleaning</span><span class="chip">Dashboards</span></div>
+            </div>
+            <div class="project-foot">
+              <div class="btn-row">
+                <a class="btn btn-primary btn-sm" href="#" data-placeholder="report" data-role="report">View Report</a>
+                <a class="btn btn-ghost btn-sm" href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener" data-role="github">GitHub Repo</a>
+                <a class="btn btn-ghost btn-sm" href="https://www.linkedin.com/" target="_blank" rel="noopener" data-role="linkedin" hidden>LinkedIn Post</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="preview" role="img" aria-label="Entity relationship diagram preview">
+              <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <g stroke="var(--accent)" stroke-width="1.5" fill="none"><path d="M112 64 H150 V110 H188"/><path d="M112 118 H150"/><path d="M232 72 V54 H268"/></g>
+                <g fill="var(--surface)" stroke="var(--fg)" stroke-width="1.3"><rect x="36" y="44" width="76" height="44" rx="4"/><rect x="36" y="100" width="76" height="44" rx="4"/><rect x="188" y="88" width="88" height="56" rx="4"/><rect x="224" y="30" width="72" height="30" rx="4" transform="translate(-20 0)"/></g>
+                <g fill="var(--accent)"><rect x="36" y="44" width="76" height="12" rx="3"/><rect x="36" y="100" width="76" height="12" rx="3"/><rect x="188" y="88" width="88" height="12" rx="3"/><rect x="204" y="30" width="72" height="12" rx="3"/></g>
+                <g stroke="var(--line)" stroke-width="2" stroke-linecap="round"><path d="M44 68h40M44 76h28"/><path d="M44 124h40M44 132h28"/><path d="M196 112h56M196 120h40M196 128h50"/><path d="M212 48h36"/></g>
+              </svg>
+            </div>
+            <div class="project-body">
+              <h3>Database Design for Four Systems</h3>
+              <dl>
+                <div class="pair"><dt>Problem</dt><dd>Hospital, library, e-commerce and online learning systems each needed a clear structure before anyone could build them.</dd></div>
+                <div class="pair"><dt>Solution</dt><dd>Analyzed each system with an ERD, then mapped it to a relational schema, and delivered everything in one formatted workbook.</dd></div>
+              </dl>
+              <div class="chips"><span class="chip">ERD</span><span class="chip">Relational Schema</span><span class="chip">Normalization</span><span class="chip">Excel</span></div>
+            </div>
+            <div class="project-foot">
+              <div class="btn-row">
+                <a class="btn btn-primary btn-sm" href="#" data-placeholder="report" data-role="report">View Report</a>
+                <a class="btn btn-ghost btn-sm" href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener" data-role="github">GitHub Repo</a>
+                <a class="btn btn-ghost btn-sm" href="https://www.linkedin.com/" target="_blank" rel="noopener" data-role="linkedin" hidden>LinkedIn Post</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="preview" role="img" aria-label="Line chart preview of a Python analysis">
+              <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <g stroke="var(--line)" stroke-width="1"><line x1="28" y1="30" x2="296" y2="30"/><line x1="28" y1="70" x2="296" y2="70"/><line x1="28" y1="110" x2="296" y2="110"/><line x1="28" y1="150" x2="296" y2="150"/></g>
+                <path d="M32 132 L82 118 L132 124 L182 84 L232 70 L290 40" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M32 132 L82 118 L132 124 L182 84 L232 70 L290 40 V150 H32 Z" style="fill:var(--accent)" opacity="0.12"/>
+                <circle cx="290" cy="40" r="5" style="fill:var(--accent)"/>
+              </svg>
+            </div>
+            <div class="project-body">
+              <h3>Python Data Analysis</h3>
+              <dl>
+                <div class="pair"><dt>Problem</dt><dd>Replace this with the question your dataset was meant to answer.</dd></div>
+                <div class="pair"><dt>Solution</dt><dd>Replace this with how you cleaned, analyzed and charted it.</dd></div>
+              </dl>
+              <div class="chips"><span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">NumPy</span><span class="chip">Matplotlib</span></div>
+            </div>
+            <div class="project-foot">
+              <span class="tag-note">Placeholder, add your own project</span>
+              <div class="btn-row">
+                <a class="btn btn-primary btn-sm" href="#" data-placeholder="report" data-role="report">View Report</a>
+                <a class="btn btn-ghost btn-sm" href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener" data-role="github">GitHub Repo</a>
+                <a class="btn btn-ghost btn-sm" href="https://www.linkedin.com/" target="_blank" rel="noopener" data-role="linkedin" hidden>LinkedIn Post</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="band" id="services">
+    <div class="wrap">
+      <section>
+        <div class="section-head">
+          <span class="eyebrow">Services</span>
+          <h2>How I can help you.</h2>
+          <p>Small, well-scoped jobs delivered clearly.</p>
+        </div>
+        <div class="services-grid">
+          <div class="service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17v-5M12 17V8M16 17v-3"/></svg>
+            <h3>Dashboard Building</h3>
+            <p>Excel dashboards with Pivot Tables and charts that answer your main questions at a glance.</p>
+          </div>
+          <div class="service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+            <h3>Data Analytics</h3>
+            <p>Cleaning, exploring and summarizing your data in Python, with findings written in plain language.</p>
+          </div>
+          <div class="service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>
+            <h3>Database Design</h3>
+            <p>ERDs and relational schemas that show how your system's data fits together before you build it.</p>
+          </div>
+          <div class="service">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>
+            <h3>Task Automation</h3>
+            <p>Small scripts that take over repetitive spreadsheet and file work so you can skip the manual steps.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="band alt" id="credentials">
+    <div class="wrap">
+      <section>
+        <div class="cred-grid">
+          <div>
+            <span class="eyebrow">Certifications</span>
+            <h3>Training and certificates</h3>
+            <div class="cert">
+              <small>Certified</small>
+              <strong>Introduction to Data Analysis</strong>
+              <span>Switch Code training program</span>
+            </div>
+          </div>
+          <div>
+            <span class="eyebrow">Testimonials</span>
+            <h3>What people say</h3>
+            <div class="quote">
+              <q>Add a short recommendation from a lecturer, teammate or client here.</q>
+              <small>Placeholder. Replace with a real quote and name.</small>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="band" id="contact">
+    <div class="wrap">
+      <section>
+        <div class="section-head">
+          <span class="eyebrow">Contact</span>
+          <h2>Let's work on something together.</h2>
+          <p>Send a message, or reach me directly on any of the channels.</p>
+        </div>
+        <div class="contact-grid">
+          <form id="contactForm" novalidate>
+            <div class="field"><label for="cName">Name</label><input id="cName" name="name" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="cEmail">Email</label><input id="cEmail" name="email" type="email" autocomplete="email" required></div>
+            <div class="field"><label for="cMsg">Message</label><textarea id="cMsg" name="message" required></textarea></div>
+            <div><button class="btn btn-primary" type="submit">Send Message</button></div>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+          <div class="links">
+            <a class="link-row" href="https://www.linkedin.com/in/ahmed-abu-zaid-abdul-aziz-3b6563439" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9.75h4V21H3zM9.5 9.75h3.8v1.6h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1V21h-4v-4.9c0-1.17-.02-2.67-1.63-2.67-1.63 0-1.88 1.27-1.88 2.58V21h-4z"/></svg>
+              <div><small>LinkedIn</small><span>ahmed-abu-zaid-abdul-aziz</span></div>
+            </a>
+            <a class="link-row" href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 00-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 015.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0012 .5z"/></svg>
+              <div><small>GitHub</small><span>github.com/YOUR-USERNAME</span></div>
+            </a>
+            <div class="link-wrap">
+              <a class="link-row" href="mailto:aabozied753@gmail.com">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+                <div><small>Email</small><span>aabozied753@gmail.com</span></div>
+              </a>
+              <button class="copy" type="button" data-copy="aabozied753@gmail.com">Copy</button>
+            </div>
+            <div class="link-wrap">
+              <a class="link-row" href="https://wa.me/201204490690" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 01-12.6 7.4L3 20l1.2-5.2A8.5 8.5 0 1121 11.5z"/><path d="M9 8.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-.8.8c-.8-.4-1.6-1.2-2-2l.8-.8-1-2z"/></svg>
+                <div><small>WhatsApp</small><span>+20 120 449 0690</span></div>
+              </a>
+              <button class="copy" type="button" data-copy="+201204490690">Copy</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <p>&copy; <span id="year">2026</span> Ahmed Abu Zaid Abdul Aziz. All rights reserved.</p>
+    <a href="cv.pdf" download>Download my CV</a>
+  </div>
+</footer>
+
+<div class="wrap admin-zone">
+  <button class="admin-link" id="adminBtn" type="button" aria-expanded="false" aria-controls="adminPanel">Admin</button>
+  <div class="admin-panel" id="adminPanel" hidden>
+    <p id="adminMsg" role="status" aria-live="polite">Sign in with the admin Google account to edit this page.</p>
+    <div id="gBtn"></div>
+    <button class="btn btn-ghost btn-sm" id="signOutBtn" type="button" hidden>Sign out</button>
+  </div>
+</div>
+
+<div class="edit-bar" id="editBar" hidden>
+  <p id="editMsg" role="status" aria-live="polite">Edit mode: click any text to change it.</p>
+  <div class="edit-actions">
+    <button class="btn btn-ghost btn-sm" id="eAdd" type="button">+ Add project</button>
+    <button class="btn btn-ghost btn-sm" id="eReset" type="button">Reset</button>
+    <button class="btn btn-ghost btn-sm" id="eCopy" type="button">Copy HTML</button>
+    <button class="btn btn-ghost btn-sm" id="eDown" type="button">Download HTML</button>
+    <button class="btn btn-primary btn-sm" id="eDone" type="button">Done</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+
+  /* Saved edits (this browser only). Change VERSION when you restructure the page so old saves are ignored. */
+  var VERSION = 'v6';
+  try {
+    var raw = localStorage.getItem('pf-edits');
+    var saved0 = raw ? JSON.parse(raw) : null;
+    if (saved0 && saved0.v === VERSION) {
+      if (saved0.main) document.querySelector('main').innerHTML = saved0.main;
+      if (saved0.foot) document.querySelector('footer').innerHTML = saved0.foot;
+      if (saved0.brand) document.querySelector('.brand').innerHTML = saved0.brand;
+    }
+  } catch (e) {}
+
+  var nav = document.getElementById('nav');
+  var menuBtn = document.getElementById('menuBtn');
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* Theme toggle (remembered per viewer, optional) */
+  try { var saved = localStorage.getItem('theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var dark = root.getAttribute('data-theme') === 'dark' ||
+      (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var next = dark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  /* Mobile menu */
+  menuBtn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', String(open));
+  });
+  nav.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+  });
+
+  /* Active nav link */
+  var links = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id); });
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    ['home', 'about', 'skills', 'projects', 'services', 'contact'].forEach(function (id) {
+      var el = document.getElementById(id); if (el) io.observe(el);
+    });
+  }
+
+  /* Placeholder report links stay on the page */
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('[data-placeholder]')) e.preventDefault();
+  });
+
+  /* Copy buttons */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('.copy');
+    if (!btn) return;
+    var text = btn.getAttribute('data-copy');
+    var done = function () { var old = btn.textContent; btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = old; }, 1400); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { btn.textContent = text; });
+    } else { btn.textContent = text; }
+  });
+
+  /* Contact form: builds an email draft; nothing is sent from the page itself */
+  var form = document.getElementById('contactForm');
+  var status = document.getElementById('formStatus');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('cName').value.trim();
+    var email = document.getElementById('cEmail').value.trim();
+    var msg = document.getElementById('cMsg').value.trim();
+    if (!name || !/^\S+@\S+\.\S+$/.test(email) || !msg) {
+      status.textContent = 'Please fill in your name, a valid email and a message.';
+      return;
+    }
+    var subject = 'Portfolio message from ' + name;
+    var body = msg + '\n\n' + name + '\n' + email;
+    var href = 'mailto:aabozied753@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    status.innerHTML = 'Your message is ready. <a href="' + href + '">Open it in your email app</a>, or write to aabozied753@gmail.com directly.';
+  });
+
+  /* ---------- Edit mode: click the pencil in the header, then click any text to change it ---------- */
+  var body = document.body;
+  var editBar = document.getElementById('editBar');
+  var editMsg = document.getElementById('editMsg');
+  var editBtn = document.getElementById('editBtn');
+  var editing = false;
+
+  /* Admin sign-in with Google. Visitors browse normally; only the admin Gmail unlocks the pencil.
+     Set GOOGLE_CLIENT_ID first (steps are in the comment at the top of this file). */
+  var GOOGLE_CLIENT_ID = 'YOUR-CLIENT-ID.apps.googleusercontent.com';
+  var ADMIN_EMAIL = 'aabozied753@gmail.com';
+  var adminBtn = document.getElementById('adminBtn');
+  var adminPanel = document.getElementById('adminPanel');
+  var adminMsg = document.getElementById('adminMsg');
+  var gBtn = document.getElementById('gBtn');
+  var signOutBtn = document.getElementById('signOutBtn');
+  var gRendered = false;
+
+  function isAdmin() {
+    try {
+      var s = JSON.parse(localStorage.getItem('pf-admin') || 'null');
+      return !!(s && s.email === ADMIN_EMAIL && s.exp > Date.now());
+    } catch (e) { return false; }
+  }
+  function applyAdmin() {
+    var a = isAdmin();
+    editBtn.hidden = !a;
+    signOutBtn.hidden = !a;
+    gBtn.hidden = a;
+    if (a) adminMsg.textContent = 'Signed in as ' + ADMIN_EMAIL + '. Use the pencil in the header to edit.';
+    if (!a && editing) setEditing(false);
+  }
+  function parseJwt(t) {
+    var p = t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    var json = decodeURIComponent(atob(p).split('').map(function (c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); }).join(''));
+    return JSON.parse(json);
+  }
+  function onCredential(resp) {
+    try {
+      var c = parseJwt(resp.credential);
+      var ok = c.email === ADMIN_EMAIL && c.email_verified === true && c.aud === GOOGLE_CLIENT_ID &&
+               /^(https:\/\/)?accounts\.google\.com$/.test(c.iss) && c.exp * 1000 > Date.now();
+      if (!ok) { adminMsg.textContent = 'That Google account is not the admin account.'; return; }
+      localStorage.setItem('pf-admin', JSON.stringify({ email: c.email, exp: Date.now() + 12 * 3600 * 1000 }));
+      applyAdmin();
+    } catch (e) { adminMsg.textContent = 'Sign-in failed. Please try again.'; }
+  }
+  function loadGoogle(cb) {
+    if (window.google && google.accounts && google.accounts.id) { cb(true); return; }
+    var finished = false;
+    function end(v) { if (!finished) { finished = true; cb(v); } }
+    var s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
+    s.onload = function () { end(true); };
+    s.onerror = function () { end(false); };
+    document.head.appendChild(s);
+    setTimeout(function () { end(!!(window.google && google.accounts && google.accounts.id)); }, 6000);
+  }
+  adminBtn.addEventListener('click', function () {
+    var open = adminPanel.hidden;
+    adminPanel.hidden = !open;
+    adminBtn.setAttribute('aria-expanded', String(open));
+    if (!open || isAdmin() || gRendered) return;
+    if (GOOGLE_CLIENT_ID.indexOf('YOUR-CLIENT-ID') === 0) {
+      adminMsg.textContent = 'Admin sign-in is not set up yet. Add your Google Client ID in index.html.';
+      return;
+    }
+    adminMsg.textContent = 'Loading Google sign-in...';
+    loadGoogle(function (ok) {
+      if (!ok) { adminMsg.textContent = 'Google sign-in could not load here. It works on your own site once the Client ID is set.'; return; }
+      google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onCredential });
+      google.accounts.id.renderButton(gBtn, { theme: 'outline', size: 'large', text: 'signin_with' });
+      gRendered = true;
+      adminMsg.textContent = 'Sign in with the admin Google account to edit this page.';
+    });
+  });
+  signOutBtn.addEventListener('click', function () {
+    try { localStorage.removeItem('pf-admin'); } catch (e) {}
+    try { if (window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect(); } catch (e) {}
+    adminMsg.textContent = 'Signed out.';
+    applyAdmin();
+  });
+  applyAdmin();
+
+  var EDITABLE = 'h1,h2,h3,p,dt,dd,small,strong,q,.chip,.stat b,.stat span,.eyebrow,a.btn,.link-row span,.tag-note,.legend,.brand span';
+  var SCOPES = 'main, footer, .brand';
+  var saveTimer = null, resetTimer = null;
+
+  function say(t) { editMsg.textContent = t; }
+
+  function cleanHTML(el) {
+    var c = el.cloneNode(true);
+    Array.prototype.forEach.call(c.querySelectorAll('[contenteditable]'), function (n) { n.removeAttribute('contenteditable'); });
+    Array.prototype.forEach.call(c.querySelectorAll('.add-chip, .link-editor'), function (n) { n.remove(); });
+    return c.innerHTML;
+  }
+  function saveEdits() {
+    try {
+      localStorage.setItem('pf-edits', JSON.stringify({
+        v: VERSION,
+        main: cleanHTML(document.querySelector('main')),
+        foot: cleanHTML(document.querySelector('footer')),
+        brand: cleanHTML(document.querySelector('.brand'))
+      }));
+      say('Saved on this device. Use Copy HTML or Download HTML to keep the changes in your file.');
+    } catch (e) { say('This browser blocked saving. Use Copy HTML or Download HTML so you do not lose your changes.'); }
+  }
+  function fullHTML() {
+    var c = document.documentElement.cloneNode(true);
+    var bar = c.querySelector('#editBar'); if (bar) bar.remove();
+    Array.prototype.forEach.call(c.querySelectorAll('[contenteditable]'), function (n) { n.removeAttribute('contenteditable'); });
+    Array.prototype.forEach.call(c.querySelectorAll('.add-chip, .link-editor'), function (n) { n.remove(); });
+    var b = c.querySelector('body'); if (b) b.classList.remove('editing');
+    return '<!doctype html>\n' + c.outerHTML;
+  }
+
+  function setEditing(on) {
+    editing = on;
+    body.classList.toggle('editing', on);
+    editBar.hidden = !on;
+    editBtn.setAttribute('aria-pressed', String(on));
+    Array.prototype.forEach.call(document.querySelectorAll(SCOPES), function (scope) {
+      Array.prototype.forEach.call(scope.querySelectorAll(EDITABLE), function (el) {
+        if (on) el.setAttribute('contenteditable', 'true'); else el.removeAttribute('contenteditable');
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.add-chip, .link-editor'), function (n) { n.remove(); });
+    if (on) {
+      Array.prototype.forEach.call(document.querySelectorAll('main .project'), projectEditor);
+      Array.prototype.forEach.call(document.querySelectorAll('main .chips'), function (c) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'add-chip'; b.textContent = '+ Add'; b.setAttribute('contenteditable', 'false');
+        c.appendChild(b);
+      });
+      nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false');
+      say('Edit mode: click any text to change it. Changes save on this device.');
+    }
+  }
+
+  /* Project links and add/remove (edit mode only) */
+  var LINK_FIELDS = [['report', 'Report or demo URL'], ['github', 'GitHub URL'], ['linkedin', 'LinkedIn post URL']];
+  function projectEditor(card) {
+    var old = card.querySelector('.link-editor'); if (old) old.remove();
+    var ed = document.createElement('div');
+    ed.className = 'link-editor';
+    ed.setAttribute('contenteditable', 'false');
+    LINK_FIELDS.forEach(function (f) {
+      var a = card.querySelector('[data-role="' + f[0] + '"]');
+      var label = document.createElement('label');
+      label.textContent = f[1];
+      var input = document.createElement('input');
+      input.type = 'url'; input.placeholder = 'https://...'; input.setAttribute('data-for', f[0]);
+      var href = a ? a.getAttribute('href') : '';
+      if (a && !a.hidden && /^https?:\/\//i.test(href) && href.indexOf('YOUR-USERNAME') === -1) input.value = href;
+      label.appendChild(input);
+      ed.appendChild(label);
+    });
+    var rm = document.createElement('button');
+    rm.type = 'button'; rm.className = 'btn btn-ghost btn-sm remove-project'; rm.textContent = 'Remove this project';
+    ed.appendChild(rm);
+    card.querySelector('.project-foot').appendChild(ed);
+  }
+  document.addEventListener('input', function (e) {
+    var input = e.target;
+    if (!editing || !input.matches || !input.matches('.link-editor input')) return;
+    var card = input.closest('.project');
+    var role = input.getAttribute('data-for');
+    var a = card.querySelector('[data-role="' + role + '"]');
+    if (!a) return;
+    var val = input.value.trim();
+    if (/^https?:\/\//i.test(val)) {
+      a.setAttribute('href', val); a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener');
+      a.removeAttribute('data-placeholder'); a.hidden = false;
+    } else if (val === '') {
+      if (role === 'report') { a.setAttribute('href', '#'); a.setAttribute('data-placeholder', 'report'); }
+      if (role === 'github') a.setAttribute('href', 'https://github.com/YOUR-USERNAME');
+      if (role === 'linkedin') a.hidden = true;
+    }
+  });
+  document.addEventListener('click', function (e) {
+    if (!editing || !e.target.closest) return;
+    var rm = e.target.closest('.remove-project');
+    if (rm) { rm.closest('.project').remove(); saveEdits(); }
+  });
+  document.getElementById('eAdd').addEventListener('click', function () {
+    var grid = document.querySelector('.projects-grid');
+    var src = grid.lastElementChild;
+    if (!src) return;
+    var c = src.cloneNode(true);
+    Array.prototype.forEach.call(c.querySelectorAll('.link-editor, .tag-note, .add-chip'), function (n) { n.remove(); });
+    c.querySelector('h3').textContent = 'New project';
+    var dds = c.querySelectorAll('dd');
+    if (dds[0]) dds[0].textContent = 'Describe the problem this project solves.';
+    if (dds[1]) dds[1].textContent = 'Describe what you built and how.';
+    var chips = c.querySelector('.chips');
+    chips.innerHTML = '<span class="chip" contenteditable="true">Tag</span>';
+    var add = document.createElement('button');
+    add.type = 'button'; add.className = 'add-chip'; add.textContent = '+ Add'; add.setAttribute('contenteditable', 'false');
+    chips.appendChild(add);
+    var rep = c.querySelector('[data-role="report"]');
+    if (rep) { rep.setAttribute('href', '#'); rep.setAttribute('data-placeholder', 'report'); rep.removeAttribute('target'); }
+    var gh = c.querySelector('[data-role="github"]'); if (gh) gh.setAttribute('href', 'https://github.com/YOUR-USERNAME');
+    var li = c.querySelector('[data-role="linkedin"]'); if (li) li.hidden = true;
+    grid.appendChild(c);
+    projectEditor(c);
+    c.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    saveEdits();
+    say('New project added. Fill in the text and the links, then press Done.');
+  });
+
+  editBtn.addEventListener('click', function () { setEditing(!editing); });
+  document.getElementById('eDone').addEventListener('click', function () { saveEdits(); setEditing(false); });
+
+  document.getElementById('eReset').addEventListener('click', function (e) {
+    var b = e.currentTarget;
+    if (b.getAttribute('data-armed') === '1') {
+      try { localStorage.removeItem('pf-edits'); } catch (x) {}
+      location.reload();
+      return;
+    }
+    b.setAttribute('data-armed', '1'); b.textContent = 'Click again to reset';
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(function () { b.removeAttribute('data-armed'); b.textContent = 'Reset'; }, 3000);
+  });
+
+  document.getElementById('eCopy').addEventListener('click', function () {
+    var html = fullHTML();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(html).then(
+        function () { say('Page HTML copied. Paste it into index.html to keep your changes.'); },
+        function () { say('Copy was blocked here. Try Download HTML, or open the page on your own site.'); }
+      );
+    } else { say('Copy is not available here. Try Download HTML.'); }
+  });
+
+  document.getElementById('eDown').addEventListener('click', function () {
+    try {
+      var blob = new Blob([fullHTML()], { type: 'text/html' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'index.html';
+      document.body.appendChild(a); a.click(); a.remove();
+      say('If the download did not start, use Copy HTML and paste it into index.html.');
+    } catch (x) { say('Download is not available here. Use Copy HTML instead.'); }
+  });
+
+  /* Links do not navigate while editing */
+  document.addEventListener('click', function (e) {
+    if (!editing) return;
+    var t = e.target;
+    if (t.closest && t.closest('.add-chip')) {
+      var chip = document.createElement('span');
+      chip.className = 'chip'; chip.textContent = 'New skill'; chip.setAttribute('contenteditable', 'true');
+      t.parentNode.insertBefore(chip, t);
+      chip.focus();
+      var r = document.createRange(); r.selectNodeContents(chip);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      saveEdits();
+      return;
+    }
+    if (t.closest && t.closest('a') && !t.closest('#editBar')) e.preventDefault();
+  }, true);
+
+  /* Single-line fields: Enter does nothing. Paste as plain text. Empty skills are removed. */
+  document.addEventListener('keydown', function (e) {
+    if (!editing || e.key !== 'Enter') return;
+    var t = e.target;
+    if (t.matches && t.matches('.chip, a.btn, h1, h2, h3, small, strong, .eyebrow, .stat b, .stat span')) e.preventDefault();
+  });
+  document.addEventListener('paste', function (e) {
+    if (!editing || !e.target.isContentEditable) return;
+    e.preventDefault();
+    var text = (e.clipboardData || window.clipboardData).getData('text');
+    document.execCommand('insertText', false, text);
+  });
+  document.addEventListener('focusout', function (e) {
+    if (editing && e.target.classList && e.target.classList.contains('chip') && !e.target.textContent.trim()) {
+      e.target.remove(); saveEdits();
+    }
+  });
+  document.addEventListener('input', function () {
+    if (!editing) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveEdits, 600);
+  });
+})();
+</script>
